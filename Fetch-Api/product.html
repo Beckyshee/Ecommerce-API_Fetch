@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #cont{
+    width: 80%;
+    margin: 50px auto;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 20px;
+}
+#cont>div{
+    padding: 20px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+#cont>div>img{
+    width: 100%;
+    height: 300px;
+}
+</style>
+<body>
+    <div id="cont">
+        <div id="product-details">
+            <img src="">
+            <h2 class="product-1"></h2>
+            <p class="description"></p>
+            <p class="price"></p>
+        </div>
+    </div>
+</body>
+<script>
+
+
+const cont = document.getElementById('cont');
+const productDetailsContainer = document.getElementById('product-details');
+const cartItemsContainer = document.getElementById('cart-items');
+const totalAmountSpan = document.getElementById('total-amount');
+const clearCartButton = document.getElementById('clear-cart');
+
+let products = [];
+let cart = [];
+
+
+async function fetchMyProducts(product_id) {
+    try {
+        const url = `https://fakestoreapi.com/products/${product_id}`;
+        const response = await fetch(url)
+        .then(res=>res.json())
+            .then(json=>
+            {
+                const product_1 = document.querySelector('.product-1');
+               console.log(json);
+
+                product_1.innerHTML = json.title
+
+                const img = document.querySelector('img');
+                img.src = json.image
+
+
+                const price = document.querySelector('.price');
+                console.log(json);
+                 price.innerHTML = json.price
+
+
+                 const description = document.querySelector('.description');
+                console.log(json);
+                 description.innerHTML = json.description
+
+
+
+            }
+            
+            
+           
+            
+            
+            
+            )
+
+
+    } catch (error) {
+        console.error('Error fetching products:', error);
+    }
+}
+
+
+
+    function displayProducts(products) {
+    cont.innerHTML = '';
+
+    products.forEach(product => {
+        const productElement = document.createElement('div');
+        productElement.classList.add('product');
+        productElement.innerHTML = `
+            <img src="${product.image}" alt="${product.title}">
+            <p>Category: ${product.category}</p>
+            <p>Price: ${product.price.toFixed(2)}</p>
+            <p>rating: ${product.category}</p>
+            <button class="add-to-cart" data-id="${product.id}" onclick="my_products(${product.id})" >Add to Cart</button>
+        `;
+
+        const addToCartButton = productElement.querySelector('.add-to-cart');
+        addToCartButton.addEventListener('click', () => addToCart(product));
+
+        cont.appendChild(productElement);
+    });
+}
+
+fetchMyProducts(1);
+</script>
+</html>
